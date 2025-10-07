@@ -15,10 +15,32 @@ import computerEducationImage from '@/assets/computer-education.jpg';
 const Index = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  // Book-style navigation: show one section at a time via tabs
-  useEffect(() => {}, []);
+  // Track current slide based on scroll position to keep tabs in sync
+  useEffect(() => {
+    const handleScroll = () => {
+      const slides = document.querySelectorAll('[data-slide-index]');
+      let current = 0;
 
-  const setSlide = (index: number) => setCurrentSlide(index);
+      slides.forEach((slide, index) => {
+        const rect = (slide as HTMLElement).getBoundingClientRect();
+        if (rect.top >= -100 && rect.top <= 100) {
+          current = index;
+        }
+      });
+
+      setCurrentSlide(current);
+    };
+
+    const scrollContainer = document.querySelector('main');
+    scrollContainer?.addEventListener('scroll', handleScroll);
+
+    return () => scrollContainer?.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToSlide = (index: number) => {
+    const slide = document.querySelector(`[data-slide-index="${index}"]`);
+    slide?.scrollIntoView({ behavior: 'smooth' });
+  };
 
   return (
     <>
@@ -30,11 +52,10 @@ const Index = () => {
           { label: 'Connect', index: 3 },
         ]}
         currentIndex={currentSlide}
-        onSelect={setSlide}
+        onSelect={scrollToSlide}
       />
-      <main className="bg-gradient-soft h-screen overflow-hidden">
+      <main className="bg-gradient-soft snap-y snap-mandatory overflow-y-scroll h-screen">
       {/* Slide 1 - Aaryavart */}
-      {currentSlide === 0 && (
       <PresentationSlide id="aaryavart" className="bg-gradient-to-br from-primary/5 via-background to-secondary/5" data-slide-index="0">
         <div className="space-y-12">
           {/* Header */}
@@ -124,10 +145,8 @@ const Index = () => {
           </div>
         </div>
       </PresentationSlide>
-      )}
 
       {/* Slide 2 - Our Journey */}
-      {currentSlide === 1 && (
       <PresentationSlide id="journey" className="bg-gradient-to-br from-accent/5 via-background to-primary/5" data-slide-index="1">
         <div className="space-y-12">
           {/* Header */}
@@ -218,10 +237,8 @@ const Index = () => {
           </div>
         </div>
       </PresentationSlide>
-      )}
 
       {/* Slide 3 - Sarya */}
-      {currentSlide === 2 && (
       <PresentationSlide id="sarya" className="bg-gradient-to-br from-secondary/5 via-background to-accent/5" data-slide-index="2">
         <div className="space-y-12">
           {/* Header */}
@@ -317,10 +334,8 @@ const Index = () => {
 
         </div>
       </PresentationSlide>
-      )}
 
       {/* Slide 4 - Contact & Follow */}
-      {currentSlide === 3 && (
       <PresentationSlide id="contact" className="bg-gradient-to-br from-primary/5 via-background to-secondary/5" data-slide-index="3">
         <div className="space-y-12">
           {/* Header */}
@@ -401,7 +416,6 @@ const Index = () => {
           </div>
         </div>
       </PresentationSlide>
-      )}
     </main>
     </>
   );

@@ -8,7 +8,7 @@ interface SectionTabsProps {
 
 export const SectionTabs = ({ sections, currentIndex, onSelect }: SectionTabsProps) => {
   return (
-    <div className="fixed top-6 left-1/2 -translate-x-1/2 z-50 flex items-center gap-2 bg-background/80 backdrop-blur-sm px-3 py-2 rounded-full border shadow-soft">
+    <div className="fixed right-6 top-1/2 -translate-y-1/2 z-50 flex flex-col items-stretch gap-2 bg-transparent px-0 py-0">
       {sections.map((s) => (
         <div
           key={s.index}
@@ -19,10 +19,10 @@ export const SectionTabs = ({ sections, currentIndex, onSelect }: SectionTabsPro
             if (e.key === 'Enter' || e.key === ' ') onSelect(s.index);
           }}
           className={cn(
-            "px-4 py-2 text-sm md:text-base rounded-full transition-all font-semibold cursor-pointer",
+            "px-3 py-2 text-sm md:text-base rounded-full transition-all font-semibold cursor-pointer",
             s.index === currentIndex
-              ? "bg-primary text-primary-foreground shadow-card"
-              : "bg-muted hover:bg-card text-foreground"
+              ? "border-2 border-primary text-foreground"
+              : "border border-border text-foreground hover:bg-muted/20"
           )}
           aria-label={`Open section ${s.label}`}
         >
