@@ -117,3 +117,24 @@ All colors MUST be HSL.
     @apply bg-background text-foreground;
   }
 }
+
+@layer utilities {
+  /* Ensures wide images fit comfortably within viewport height */
+  .image-fit-screen {
+    @apply w-full object-cover;
+    max-height: 60vh;
+  }
+
+  @media (min-width: 768px) {
+    .image-fit-screen {
+      max-height: 50vh;
+    }
+  }
+
+  /* Card images with stable aspect ratio to avoid awkward cropping */
+  .image-card {
+    @apply w-full object-cover;
+    aspect-ratio: 4 / 3;
+    object-position: center;
+  }
+}

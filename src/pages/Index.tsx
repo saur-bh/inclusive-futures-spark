@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { PresentationSlide } from '@/components/PresentationSlide';
 import { FeatureCard } from '@/components/FeatureCard';
-import { NavigationDots } from '@/components/NavigationDots';
+import { SectionTabs } from '@/components/SectionTabs';
 import { JourneyTimeline } from '@/components/JourneyTimeline';
 import { ImpactStats } from '@/components/ImpactStats';
 import { Heart, Users, Brain, Sparkles, BookOpen, TrendingUp, Home, Smile, TreePine, Flag, Award, Monitor } from 'lucide-react';
@@ -15,41 +15,26 @@ import computerEducationImage from '@/assets/computer-education.jpg';
 const Index = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
 
-  useEffect(() => {
-    const handleScroll = () => {
-      const slides = document.querySelectorAll('[data-slide-index]');
-      let current = 0;
-      
-      slides.forEach((slide, index) => {
-        const rect = slide.getBoundingClientRect();
-        if (rect.top >= -100 && rect.top <= 100) {
-          current = index;
-        }
-      });
-      
-      setCurrentSlide(current);
-    };
+  // Book-style navigation: show one section at a time via tabs
+  useEffect(() => {}, []);
 
-    const scrollContainer = document.querySelector('main');
-    scrollContainer?.addEventListener('scroll', handleScroll);
-    
-    return () => scrollContainer?.removeEventListener('scroll', handleScroll);
-  }, []);
-
-  const scrollToSlide = (index: number) => {
-    const slide = document.querySelector(`[data-slide-index="${index}"]`);
-    slide?.scrollIntoView({ behavior: 'smooth' });
-  };
+  const setSlide = (index: number) => setCurrentSlide(index);
 
   return (
     <>
-      <NavigationDots 
-        totalSlides={4} 
-        currentSlide={currentSlide} 
-        onNavigate={scrollToSlide}
+      <SectionTabs 
+        sections={[
+          { label: 'Aaryavart', index: 0 },
+          { label: 'Journey', index: 1 },
+          { label: 'Sarya', index: 2 },
+          { label: 'Connect', index: 3 },
+        ]}
+        currentIndex={currentSlide}
+        onSelect={setSlide}
       />
-      <main className="bg-gradient-soft snap-y snap-mandatory overflow-y-scroll h-screen">
+      <main className="bg-gradient-soft h-screen overflow-hidden">
       {/* Slide 1 - Aaryavart */}
+      {currentSlide === 0 && (
       <PresentationSlide id="aaryavart" className="bg-gradient-to-br from-primary/5 via-background to-secondary/5" data-slide-index="0">
         <div className="space-y-12">
           {/* Header */}
@@ -70,7 +55,7 @@ const Index = () => {
             <img 
               src={aaryavartImage} 
               alt="Aaryavart Centre - Children engaged in therapy and learning activities"
-              className="w-full h-[400px] object-cover"
+              className="image-fit-screen"
             />
           </div>
 
@@ -139,8 +124,10 @@ const Index = () => {
           </div>
         </div>
       </PresentationSlide>
+      )}
 
       {/* Slide 2 - Our Journey */}
+      {currentSlide === 1 && (
       <PresentationSlide id="journey" className="bg-gradient-to-br from-accent/5 via-background to-primary/5" data-slide-index="1">
         <div className="space-y-12">
           {/* Header */}
@@ -170,7 +157,7 @@ const Index = () => {
                   <img 
                     src={treePlantationImage} 
                     alt="Children participating in tree plantation activity"
-                    className="w-full h-48 object-cover"
+                    className="image-card"
                   />
                 </div>
                 <div className="flex items-center gap-3 mb-2">
@@ -186,7 +173,7 @@ const Index = () => {
                   <img 
                     src={independenceDayImage} 
                     alt="Children celebrating Independence Day with activities"
-                    className="w-full h-48 object-cover"
+                    className="image-card"
                   />
                 </div>
                 <div className="flex items-center gap-3 mb-2">
@@ -202,7 +189,7 @@ const Index = () => {
                   <img 
                     src={cultureEventImage} 
                     alt="Children performing at cultural event"
-                    className="w-full h-48 object-cover"
+                    className="image-card"
                   />
                 </div>
                 <div className="flex items-center gap-3 mb-2">
@@ -218,7 +205,7 @@ const Index = () => {
                   <img 
                     src={computerEducationImage} 
                     alt="Children learning computer skills with instructors"
-                    className="w-full h-48 object-cover"
+                    className="image-card"
                   />
                 </div>
                 <div className="flex items-center gap-3 mb-2">
@@ -231,8 +218,10 @@ const Index = () => {
           </div>
         </div>
       </PresentationSlide>
+      )}
 
       {/* Slide 3 - Sarya */}
+      {currentSlide === 2 && (
       <PresentationSlide id="sarya" className="bg-gradient-to-br from-secondary/5 via-background to-accent/5" data-slide-index="2">
         <div className="space-y-12">
           {/* Header */}
@@ -253,7 +242,7 @@ const Index = () => {
             <img 
               src={saryaImage} 
               alt="Sarya App - Child using visual learning app with parent support"
-              className="w-full h-[400px] object-cover"
+              className="image-fit-screen"
             />
           </div>
 
@@ -328,8 +317,10 @@ const Index = () => {
 
         </div>
       </PresentationSlide>
+      )}
 
       {/* Slide 4 - Contact & Follow */}
+      {currentSlide === 3 && (
       <PresentationSlide id="contact" className="bg-gradient-to-br from-primary/5 via-background to-secondary/5" data-slide-index="3">
         <div className="space-y-12">
           {/* Header */}
@@ -410,6 +401,7 @@ const Index = () => {
           </div>
         </div>
       </PresentationSlide>
+      )}
     </main>
     </>
   );
