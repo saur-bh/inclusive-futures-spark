@@ -1,14 +1,56 @@
+import { useState, useEffect } from 'react';
 import { PresentationSlide } from '@/components/PresentationSlide';
 import { FeatureCard } from '@/components/FeatureCard';
-import { Heart, Users, Brain, Sparkles, BookOpen, TrendingUp, Home, Smile } from 'lucide-react';
+import { NavigationDots } from '@/components/NavigationDots';
+import { JourneyTimeline } from '@/components/JourneyTimeline';
+import { ImpactStats } from '@/components/ImpactStats';
+import { Heart, Users, Brain, Sparkles, BookOpen, TrendingUp, Home, Smile, TreePine, Flag, Award, Monitor } from 'lucide-react';
 import aaryavartImage from '@/assets/aaryavart-centre.jpg';
 import saryaImage from '@/assets/sarya-app.jpg';
+import treePlantationImage from '@/assets/tree-plantation.jpg';
+import independenceDayImage from '@/assets/independence-day.jpg';
+import cultureEventImage from '@/assets/culture-event.jpg';
+import computerEducationImage from '@/assets/computer-education.jpg';
 
 const Index = () => {
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const slides = document.querySelectorAll('[data-slide-index]');
+      let current = 0;
+      
+      slides.forEach((slide, index) => {
+        const rect = slide.getBoundingClientRect();
+        if (rect.top >= -100 && rect.top <= 100) {
+          current = index;
+        }
+      });
+      
+      setCurrentSlide(current);
+    };
+
+    const scrollContainer = document.querySelector('main');
+    scrollContainer?.addEventListener('scroll', handleScroll);
+    
+    return () => scrollContainer?.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  const scrollToSlide = (index: number) => {
+    const slide = document.querySelector(`[data-slide-index="${index}"]`);
+    slide?.scrollIntoView({ behavior: 'smooth' });
+  };
+
   return (
-    <main className="bg-gradient-soft snap-y snap-mandatory overflow-y-scroll h-screen">
+    <>
+      <NavigationDots 
+        totalSlides={4} 
+        currentSlide={currentSlide} 
+        onNavigate={scrollToSlide}
+      />
+      <main className="bg-gradient-soft snap-y snap-mandatory overflow-y-scroll h-screen">
       {/* Slide 1 - Aaryavart */}
-      <PresentationSlide id="aaryavart" className="bg-gradient-to-br from-primary/5 via-background to-secondary/5">
+      <PresentationSlide id="aaryavart" className="bg-gradient-to-br from-primary/5 via-background to-secondary/5" data-slide-index="0">
         <div className="space-y-12">
           {/* Header */}
           <div className="text-center space-y-4 animate-fade-in">
@@ -86,6 +128,9 @@ const Index = () => {
             </div>
           </div>
 
+          {/* Impact Statistics */}
+          <ImpactStats />
+
           {/* Core Message */}
           <div className="text-center p-8 bg-gradient-primary rounded-3xl shadow-card">
             <p className="text-2xl md:text-3xl font-bold text-primary-foreground leading-relaxed">
@@ -95,8 +140,100 @@ const Index = () => {
         </div>
       </PresentationSlide>
 
-      {/* Slide 2 - Sarya */}
-      <PresentationSlide id="sarya" className="bg-gradient-to-br from-secondary/5 via-background to-accent/5">
+      {/* Slide 2 - Our Journey */}
+      <PresentationSlide id="journey" className="bg-gradient-to-br from-accent/5 via-background to-primary/5" data-slide-index="1">
+        <div className="space-y-12">
+          {/* Header */}
+          <div className="text-center space-y-4 animate-fade-in">
+            <div className="inline-block p-3 bg-accent/10 rounded-full mb-4">
+              <Award className="w-12 h-12 text-accent" />
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight">
+              🛤️ Our Journey
+            </h1>
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto font-semibold">
+              From a small setup to empowering 1,500+ families
+            </p>
+          </div>
+
+          {/* Timeline */}
+          <JourneyTimeline />
+
+          {/* Community Activities */}
+          <div className="space-y-6">
+            <h2 className="text-3xl font-bold text-center text-foreground">How We're Making a Difference</h2>
+            
+            <div className="grid md:grid-cols-2 gap-6">
+              {/* Tree Plantation */}
+              <div className="bg-card/50 backdrop-blur-sm p-6 rounded-3xl border-2 border-primary/10 shadow-soft">
+                <div className="rounded-2xl overflow-hidden mb-4">
+                  <img 
+                    src={treePlantationImage} 
+                    alt="Children participating in tree plantation activity"
+                    className="w-full h-48 object-cover"
+                  />
+                </div>
+                <div className="flex items-center gap-3 mb-2">
+                  <TreePine className="w-6 h-6 text-primary" />
+                  <h3 className="text-xl font-bold text-foreground">Environmental Education</h3>
+                </div>
+                <p className="text-muted-foreground">Teaching children about nature and sustainability through hands-on tree plantation activities, building environmental awareness and responsibility.</p>
+              </div>
+
+              {/* Independence Day */}
+              <div className="bg-card/50 backdrop-blur-sm p-6 rounded-3xl border-2 border-secondary/10 shadow-soft">
+                <div className="rounded-2xl overflow-hidden mb-4">
+                  <img 
+                    src={independenceDayImage} 
+                    alt="Children celebrating Independence Day with activities"
+                    className="w-full h-48 object-cover"
+                  />
+                </div>
+                <div className="flex items-center gap-3 mb-2">
+                  <Flag className="w-6 h-6 text-secondary" />
+                  <h3 className="text-xl font-bold text-foreground">Cultural Integration</h3>
+                </div>
+                <p className="text-muted-foreground">Celebrating national festivals and cultural events, helping children develop a sense of identity, belonging, and pride in their heritage.</p>
+              </div>
+
+              {/* Culture Event */}
+              <div className="bg-card/50 backdrop-blur-sm p-6 rounded-3xl border-2 border-accent/10 shadow-soft">
+                <div className="rounded-2xl overflow-hidden mb-4">
+                  <img 
+                    src={cultureEventImage} 
+                    alt="Children performing at cultural event"
+                    className="w-full h-48 object-cover"
+                  />
+                </div>
+                <div className="flex items-center gap-3 mb-2">
+                  <Sparkles className="w-6 h-6 text-accent" />
+                  <h3 className="text-xl font-bold text-foreground">Performance & Confidence</h3>
+                </div>
+                <p className="text-muted-foreground">Providing platforms for children to showcase their talents, build confidence, and develop social skills through cultural performances and events.</p>
+              </div>
+
+              {/* Computer Education */}
+              <div className="bg-card/50 backdrop-blur-sm p-6 rounded-3xl border-2 border-primary/10 shadow-soft">
+                <div className="rounded-2xl overflow-hidden mb-4">
+                  <img 
+                    src={computerEducationImage} 
+                    alt="Children learning computer skills with instructors"
+                    className="w-full h-48 object-cover"
+                  />
+                </div>
+                <div className="flex items-center gap-3 mb-2">
+                  <Monitor className="w-6 h-6 text-primary" />
+                  <h3 className="text-xl font-bold text-foreground">Digital Literacy</h3>
+                </div>
+                <p className="text-muted-foreground">Empowering children with essential computer skills and technology education, preparing them for a digital future and enhanced independence.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </PresentationSlide>
+
+      {/* Slide 3 - Sarya */}
+      <PresentationSlide id="sarya" className="bg-gradient-to-br from-secondary/5 via-background to-accent/5" data-slide-index="2">
         <div className="space-y-12">
           {/* Header */}
           <div className="text-center space-y-4 animate-fade-in">
@@ -189,46 +326,92 @@ const Index = () => {
             </div>
           </div>
 
-          {/* Footer - Instagram */}
-          <div className="text-center space-y-6 p-8 bg-card/50 backdrop-blur-sm rounded-3xl border-2 border-primary/10">
-            <p className="text-2xl font-bold text-foreground">
-              💛 From therapy rooms to homes, we make learning a daily celebration.
+        </div>
+      </PresentationSlide>
+
+      {/* Slide 4 - Contact & Follow */}
+      <PresentationSlide id="contact" className="bg-gradient-to-br from-primary/5 via-background to-secondary/5" data-slide-index="3">
+        <div className="space-y-12">
+          {/* Header */}
+          <div className="text-center space-y-4 animate-fade-in">
+            <div className="inline-block p-3 bg-primary/10 rounded-full mb-4">
+              <Heart className="w-12 h-12 text-primary" />
+            </div>
+            <h1 className="text-4xl md:text-6xl font-bold text-foreground leading-tight">
+              💛 Connect With Us
+            </h1>
+            <p className="text-xl md:text-2xl text-muted-foreground max-w-3xl mx-auto font-semibold">
+              From therapy rooms to homes, we make learning a daily celebration
             </p>
-            
-            <div className="space-y-4">
-              <p className="text-xl font-semibold text-muted-foreground">📲 Follow us on Instagram</p>
-              <div className="flex flex-col md:flex-row gap-4 justify-center items-center">
-                <a 
-                  href="https://www.instagram.com/aaryavartcenterforautism"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-3 bg-primary text-primary-foreground rounded-full font-bold hover:scale-105 transition-transform shadow-soft"
-                >
-                  @aaryavartcenterforautism
-                </a>
-                <a 
-                  href="https://www.instagram.com/the_sarya_com"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-bold hover:scale-105 transition-transform shadow-soft"
-                >
-                  @the_sarya_com
-                </a>
+          </div>
+
+          {/* Instagram Links */}
+          <div className="grid md:grid-cols-2 gap-8">
+            {/* Aaryavart Instagram */}
+            <div className="bg-card/50 backdrop-blur-sm p-8 rounded-3xl border-2 border-primary/10 shadow-soft text-center space-y-6">
+              <div className="inline-block p-4 bg-primary/10 rounded-full">
+                <Heart className="w-10 h-10 text-primary" />
               </div>
+              <h2 className="text-2xl font-bold text-foreground">Aaryavart Centre</h2>
+              <p className="text-muted-foreground">Follow our journey in therapy and inclusive education</p>
               
-              <div className="pt-6">
-                <p className="text-sm text-muted-foreground mb-4">Scan to follow us:</p>
+              <a 
+                href="https://www.instagram.com/aaryavartcenterforautism"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-6 py-3 bg-primary text-primary-foreground rounded-full font-bold hover:scale-105 transition-transform shadow-soft"
+              >
+                @aaryavartcenterforautism
+              </a>
+              
+              <div className="pt-4">
+                <p className="text-sm text-muted-foreground mb-4">Scan to follow:</p>
                 <div className="inline-block p-6 bg-background rounded-2xl border-2 border-primary/20 shadow-soft">
-                  <div className="w-32 h-32 bg-muted rounded-xl flex items-center justify-center">
-                    <p className="text-xs text-muted-foreground text-center">QR Code<br />Placeholder</p>
+                  <div className="w-40 h-40 bg-muted rounded-xl flex items-center justify-center">
+                    <p className="text-xs text-muted-foreground text-center">Aaryavart<br />QR Code</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Sarya Instagram */}
+            <div className="bg-card/50 backdrop-blur-sm p-8 rounded-3xl border-2 border-secondary/10 shadow-soft text-center space-y-6">
+              <div className="inline-block p-4 bg-secondary/10 rounded-full">
+                <Sparkles className="w-10 h-10 text-secondary" />
+              </div>
+              <h2 className="text-2xl font-bold text-foreground">Sarya App</h2>
+              <p className="text-muted-foreground">Discover visual learning tools for daily living skills</p>
+              
+              <a 
+                href="https://www.instagram.com/the_sarya_com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-block px-6 py-3 bg-secondary text-secondary-foreground rounded-full font-bold hover:scale-105 transition-transform shadow-soft"
+              >
+                @the_sarya_com
+              </a>
+              
+              <div className="pt-4">
+                <p className="text-sm text-muted-foreground mb-4">Scan to follow:</p>
+                <div className="inline-block p-6 bg-background rounded-2xl border-2 border-secondary/20 shadow-soft">
+                  <div className="w-40 h-40 bg-muted rounded-xl flex items-center justify-center">
+                    <p className="text-xs text-muted-foreground text-center">Sarya<br />QR Code</p>
                   </div>
                 </div>
               </div>
             </div>
           </div>
+
+          {/* Final Message */}
+          <div className="text-center p-8 bg-gradient-primary rounded-3xl shadow-card">
+            <p className="text-2xl md:text-3xl font-bold text-primary-foreground leading-relaxed">
+              Together, we're building a more inclusive world — one child, one family, one community at a time. 🌈
+            </p>
+          </div>
         </div>
       </PresentationSlide>
     </main>
+    </>
   );
 };
 
